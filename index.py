@@ -17,8 +17,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TOKEN = os.getenv("HUGGINGFACE_TOKEN")
-
 json_file_path = "info.json"
 
 with open(json_file_path, "r") as file:
@@ -46,7 +44,7 @@ def format_prompt(message):
 
 def detail_generate(context, query):
     client = InferenceClient(
-        "mistralai/Mistral-7B-Instruct-v0.2", token=TOKEN
+        "mistralai/Mistral-7B-Instruct-v0.2"
     )
     
     system_prompt = f"""
@@ -63,7 +61,7 @@ def detail_generate(context, query):
 
 def evidence_generate(context, query):
     client = InferenceClient(
-        "mistralai/Mistral-7B-Instruct-v0.2", token=TOKEN
+        "mistralai/Mistral-7B-Instruct-v0.2"
     )
     
     system_prompt = f"""
