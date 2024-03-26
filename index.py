@@ -12,6 +12,13 @@ from langchain_text_splitters import CharacterTextSplitter
 from huggingface_hub import InferenceClient
 
 import random
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+TOKEN = os.getenv("HUGGINGFACE_TOKEN")
+
 json_file_path = "info.json"
 
 with open(json_file_path, "r") as file:
@@ -39,19 +46,7 @@ def format_prompt(message):
 
 def detail_generate(context, query):
     client = InferenceClient(
-        "mistralai/Mixtral-8x7B-Instruct-v0.1"
-    )
-    
-    seed = random.randint(1,1111111111111111)
-    temperature = 0.9
-    
-    generate_kwargs = dict(
-        temperature=temperature,
-        max_new_tokens=256,
-        top_p=0.95,
-        repetition_penalty=0.1,
-        do_sample=True,
-        seed=seed
+        "mistralai/Mistral-7B-Instruct-v0.2", token=TOKEN
     )
     
     system_prompt = f"""
@@ -62,25 +57,13 @@ def detail_generate(context, query):
     """
     formatted_prompt = format_prompt(f"{system_prompt}")
     
-    output = client.text_generation(formatted_prompt, **generate_kwargs, stream=False, details=True, return_full_text=False, stop_sequences=["\n"])
+    output = client.text_generation(formatted_prompt, stream=False, details=True, return_full_text=False, stop_sequences=["\n"], max_new_tokens=256)
 
     return output.generated_text
 
 def evidence_generate(context, query):
     client = InferenceClient(
-        "mistralai/Mixtral-8x7B-Instruct-v0.1"
-    )
-    
-    seed = random.randint(1,1111111111111111)
-    temperature = 0.9
-    
-    generate_kwargs = dict(
-        temperature=temperature,
-        max_new_tokens=256,
-        top_p=0.95,
-        repetition_penalty=0.1,
-        do_sample=True,
-        seed=seed,
+        "mistralai/Mistral-7B-Instruct-v0.2", token=TOKEN
     )
     
     system_prompt = f"""
@@ -91,7 +74,7 @@ def evidence_generate(context, query):
     """
     formatted_prompt = format_prompt(f"{system_prompt}")
     
-    output = client.text_generation(formatted_prompt, **generate_kwargs, stream=False, details=True, return_full_text=False, stop_sequences=["\n"])
+    output = client.text_generation(formatted_prompt, stream=False, details=True, return_full_text=False, stop_sequences=["\n"], max_new_tokens=256)
 
     return output.generated_text
 
