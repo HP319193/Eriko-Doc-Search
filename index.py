@@ -161,6 +161,8 @@ with col1:
                 with open(json_file_path, "w") as file:
                     json.dump(data, file, indent=4)
 
+                st.rerun()
+
 with col2:
     query = st.chat_input('Query')
     
